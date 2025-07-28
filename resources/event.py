@@ -65,19 +65,20 @@ class EventRegister(MethodView):
     def post(self,attendee,event_id):
         event=EventModel.query.get(event_id)
         if event:
-            if event.attendees.count() < event.max_capacity:
-                new_attendee=AttendeeModel(**attendee,event_id=event_id)
-                try:
-                    db.session.add(new_attendee)
-                    db.session.commit()
-                except IntegrityError as e:
-                    abort(400,message='User has already registered for a event')
-                except SQLAlchemyError as e:
-                    abort(500,message='Error occuured while registering the attendee with given event')
-                return new_attendee
-
+            exsiting_attendee_for_event=AttendeeModel.query.filter(and_(AttendeeModel.email==attendee['email'],AttendeeModel.event_id==event_id)).first()
+            if not exsiting_attendee_for_event:
+                if event.attendees.count() < event.max_capacity:
+                    new_attendee=AttendeeModel(**attendee,event_id=event_id)
+                    try:
+                        db.session.add(new_attendee)
+                        db.session.commit()
+                    except SQLAlchemyError as e:
+                        abort(500,message='Error occuured while registering the attendee with given event')
+                    return new_attendee
+                else:
+                    abort(404,message='Event is fully booked. No more seats are available.')
             else:
-                abort(404,message='Event is fully booked. No more seats are available.')
+                abort(400,message='User has already registered for the given event')
         else:
             abort(400,message='Even does not exist for the given id')
 
