@@ -42,12 +42,12 @@ class Events(MethodView):
         time_zone=ZoneInfo(new_event.get('timezone','Asia/Kolkata'))
         if time_zone not in available_timezones():
             time_zone=ZoneInfo('Asia/Kolkata')
-        start_time_local=datetime.fromisoformat(new_event['start_time'].isoformat()).replace()
-        end_time_local=datetime.fromisoformat(new_event['end_time'].isoformat()).replace()
+        start_time_local=new_event['start_time'].replace(tzinfo=time_zone)
+        end_time_local=new_event['end_time'].replace(tzinfo=time_zone)
 
         start_time_utc = start_time_local.astimezone(ZoneInfo("UTC"))
         end_time_utc = end_time_local.astimezone(ZoneInfo("UTC"))
-        new_event['start_time']=start_time_utc
+        new_event['start_time']=start_time_utc  
         new_event['end_time']=end_time_utc
         new_event=EventModel(**new_event)
         try:
@@ -55,6 +55,8 @@ class Events(MethodView):
             db.session.commit()
         except SQLAlchemyError as e:
             abort(500,message='Error occured while creating event')
+        new_event.start_time=start_time_local
+        new_event.end_time=end_time_local
         return new_event
     
 @blp.route('/events/<string:event_id>/register')
@@ -104,7 +106,6 @@ class EventAttendees(MethodView):
                     'prev_page':pagination.prev_num if pagination.has_prev else None,
                     'attendees':AttendeeSchema(many=True).dump(pagination.items)
                 }
-                print('here here')
             except NotFound as e:
                 abort(400,message='Given page does not exist')
             if len(pagination.items) > 0:
