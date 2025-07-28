@@ -37,24 +37,6 @@ THis project provides the following functionilities to the user:
 | Docs          | Swagger (flask-smorest) |
 
 ---
-# Project folder structure
-
-├── event_mgmt_system/
-│   ├── .flask_env
-│   ├── app.py
-│   ├── db.py
-│   ├── requirements.txt
-│   ├── schemas.py
-│   ├── instance/
-│   │   ├── data.db
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── attendee.py
-│   │   ├── event.py
-│   ├── resources/
-│   │   ├── event.py
-
----
 
 # Setup Instructions
 
@@ -63,8 +45,8 @@ Setup Instructions
 
 Step 1: Clone the Repository via Git Bash
 -----------------------------------------
-git clone https://github.com/ajayyewale96/event_mgmt_system.git
-cd event_mgmt_system
+- git clone https://github.com/ajayyewale96/event_mgmt_system.git
+- cd event_mgmt_system
 
 Step 2: Create a Virtual Environment
 ------------------------------------
