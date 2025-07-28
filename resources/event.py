@@ -23,7 +23,7 @@ class Events(MethodView):
         try:
             attendee_timezone=ZoneInfo(attendee_timezone)
         except ZoneInfoNotFoundError as e:
-            abort(400,message='time zone not found')
+            abort(404,message='time zone not found')
 
         events= EventModel.query.all()
         for event in events:
@@ -80,9 +80,9 @@ class EventRegister(MethodView):
                 else:
                     abort(404,message='Event is fully booked. No more seats are available.')
             else:
-                abort(400,message='User has already registered for the given event')
+                abort(404,message='User has already registered for the given event')
         else:
-            abort(400,message='Even does not exist for the given id')
+            abort(404,message='Even does not exist for the given id')
 
 
 @blp.route('/events/<string:event_id>/attendees')
@@ -107,10 +107,10 @@ class EventAttendees(MethodView):
                     'attendees':AttendeeSchema(many=True).dump(pagination.items)
                 }
             except NotFound as e:
-                abort(400,message='Given page does not exist')
+                abort(404,message='Given page does not exist')
             if len(pagination.items) > 0:
                 return total_attendees
             else:
                 abort(404,message='No attendes resigtered for the given event')
         else:
-            abort(400,message='No events found with given event id')
+            abort(404,message='No events found with given event id')
