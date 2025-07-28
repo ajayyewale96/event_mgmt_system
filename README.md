@@ -68,10 +68,8 @@ cd event_mgmt_system
 
 Step 2: Create a Virtual Environment
 ------------------------------------
-# Create the environment
 python -m venv venv
 
-# Activate the virtual environment:
 - For UNIX/macOS:
   source venv/bin/activate
 
