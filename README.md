@@ -73,12 +73,12 @@ App will be running at: http://localhost:5000
 
 # Assumptions
 
-- The user has to provide the timezone in the header of the request if no timezone is provided the code default to IST timezone for event creation.
-- As per the requirement docx and I quote "Prevent duplicate registrations for the same email". As per my understanding of this statement I am assuming that same user should 
-not register again for the same event i.e  no two registrations should be  present for the same email_id
+- The user has to provide the timezone in the header of the request for both posting the event and gettin the list of events  if no timezone is provided the code default to IST timezone for both event creation and display of event.Events are stored in UTC format in the sqlite db.
+- No two registrations for a given event should be  present for the same email_id
 - Here I am also assuming that user can register for as many events as possible even though there might be overlap as in the end user will only be able to be present for one event physically.
 - The events registered for the same location should not overlap for the given start time and end time
-
+- User has to given in the page number and number of attendees per_page as query params to see the attendee list for a given event .If no values given a default value of page=1 and per_page=10 is assumed
+- 
 ---
 # Sample API Requests (via `curl`)
 
