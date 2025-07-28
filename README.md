@@ -58,37 +58,55 @@ THis project provides the following functionilities to the user:
 
 # Setup Instructions
 
-Step 1: Clone the Repository via git bash
+Setup Instructions
+------------------
+
+Step 1: Clone the Repository via Git Bash
+-----------------------------------------
 git clone https://github.com/ajayyewale96/event_mgmt_system.git
 cd event_mgmt_system
 
-Step 2: Create virtual env
+Step 2: Create a Virtual Environment
+------------------------------------
+# Create the environment
 python -m venv venv
-UNIX: venv/bin/activate  
-Windows: venv\Scripts\activate.bat
 
-Step 3: Install the python packages
+# Activate the virtual environment:
+- For UNIX/macOS:
+  source venv/bin/activate
+
+- For Windows:
+  venv\Scripts\activate.bat
+
+Step 3: Install the Required Python Packages
+--------------------------------------------
 pip install -r requirements.txt
 
-Step 4:Run the app
+Step 4: Run the Application
+---------------------------
 flask run
-App runs at: http://localhost:5000
+
+App will be running at: http://localhost:5000
+
 
 ---
 
 # Assumptions
 
-1)The user has to provide the timezone in the header of the request if no timezone is provided the code default to IST timezone for event creation.
-2)As per the requirement docx and I quote "Prevent duplicate registrations for the same email". As per my understanding of this statement I am assuming that same user should 
+- The user has to provide the timezone in the header of the request if no timezone is provided the code default to IST timezone for event creation.
+- As per the requirement docx and I quote "Prevent duplicate registrations for the same email". As per my understanding of this statement I am assuming that same user should 
 not register again for the same event i.e  no two registrations should be  present for the same email_id
-3)Here I am also assuming that user can register for as many events as possible even though there might be overlap as in the end user will only be able to be present for one event physically.
-4)The events registered for the same location should not overlap for the given start time and end time
+- Here I am also assuming that user can register for as many events as possible even though there might be overlap as in the end user will only be able to be present for one event physically.
+- The events registered for the same location should not overlap for the given start time and end time
 
 ---
-# Sample API Requests (via curl)
+# Sample API Requests (via `curl`)
 
-1)POST /events
+---
 
+### 1) `POST /events`
+
+```bash
 curl -X POST http://localhost:5000/events \
 -H "Content-Type: application/json" \
 -d '{
@@ -98,23 +116,33 @@ curl -X POST http://localhost:5000/events \
   "end_time": "2025-08-10T17:00:00",
   "max_capacity": 300
 }'
+```
 
+---
 
-2)GET /events
+### 2) `GET /events`
 
+```bash
 curl http://localhost:5000/events
+```
 
+---
 
-3)POST /events/{event_id}/register
+### 3) `POST /events/{event_id}/register`
 
+```bash
 curl -X POST http://localhost:5000/events/1/register \
 -H "Content-Type: application/json" \
 -d '{
   "name": "Ajay Yewale",
   "email": "ajayyewle8@gmail.com"
 }'
+```
 
+---
 
-4)GET /events/{event_id}/attendees
+### 4) `GET /events/{event_id}/attendees`
 
+```bash
 curl http://localhost:5000/events/1/attendees?page=1&perpage=10
+```
