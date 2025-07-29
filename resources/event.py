@@ -27,9 +27,11 @@ class Events(MethodView):
 
         events= EventModel.query.all()
         for event in events:
-            event.start_time=event.start_time.astimezone(attendee_timezone)
-            event.end_time=event.end_time.astimezone(attendee_timezone)
+            event.start_time=event.start_time.replace(tzinfo=ZoneInfo("UTC")).astimezone(attendee_timezone)
+            event.end_time=event.end_time.replace(tzinfo=ZoneInfo("UTC")).astimezone(attendee_timezone)
             if event.start_time >= datetime.now(attendee_timezone):
+                event.start_time=event.start_time.replace(tzinfo=None)
+                event.end_time=event.end_time.replace(tzinfo=None)
                 upcoming_events.append(event)
         if upcoming_events:
             return upcoming_events

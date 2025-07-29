@@ -6,6 +6,9 @@
 #vitual env
 /venv_event_mgt_sys
 
+#database
+/instance
+
 # User-specific files
 *.rsuser
 *.suo
