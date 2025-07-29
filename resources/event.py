@@ -57,8 +57,8 @@ class Events(MethodView):
             db.session.commit()
         except SQLAlchemyError as e:
             abort(500,message='Error occured while creating event')
-        new_event.start_time=start_time_local
-        new_event.end_time=end_time_local
+        new_event.start_time=start_time_local.replace(tzinfo=None)
+        new_event.end_time=end_time_local.replace(tzinfo=None)
         return new_event
     
 @blp.route('/events/<string:event_id>/register')
