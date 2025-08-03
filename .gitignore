@@ -9,6 +9,10 @@
 #database
 instance/data.db
 
+#pdf file
+
+1NPDPRO5.PDF
+
 # User-specific files
 *.rsuser
 *.suo
