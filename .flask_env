@@ -1,2 +1,4 @@
 FLASK_APP=app
 FLASK_DEBUG=True
+DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres/event_mgmt_system
+JWT_SECRET_KEY=55341353569281057605740975238913763901

@@ -4,6 +4,7 @@ from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError,IntegrityError
 from sqlalchemy import and_
 from datetime import datetime
+from flask_jwt_extended import jwt_required
 from db import db
 from models import EventModel,AttendeeModel
 from schemas import AttendeeSchema,ResponseAttedeeSchema,EventSchema,PaginationAttendeeSchema
@@ -37,7 +38,8 @@ class Events(MethodView):
             return upcoming_events
         else:
             abort(404,message='No upcoming events found')
-        
+    
+    @jwt_required()
     @blp.arguments(EventSchema)
     @blp.response(201,EventSchema)
     def post(self,new_event):

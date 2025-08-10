@@ -1,14 +1,16 @@
 from flask import Flask
 from flask_smorest import Api,abort
 from sqlalchemy.exc import SQLAlchemyError
+from flask_jwt_extended import JWTManager
 import os
 from time import sleep
 import models
 from resources.event import blp as EventBluePrint
+from resources.user import blp as UserBluePrint
 from db import db
 
 
-def create_app(db_url='postgresql+psycopg2://postgres:postgres@postgres/event_mgmt_system'):
+def create_app(db_url='sqlite:///data.db'):
     app=Flask(__name__)
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Event Management REST API"
@@ -19,6 +21,8 @@ def create_app(db_url='postgresql+psycopg2://postgres:postgres@postgres/event_mg
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL", "sqlite:///data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['JWT_SECRET_KEY']=os.getenv('JWT_SECRET_KEY','secret')
+    jwt=JWTManager(app)
     db.init_app(app)
     api=Api(app)
     db_connection_retry=5
@@ -35,6 +39,7 @@ def create_app(db_url='postgresql+psycopg2://postgres:postgres@postgres/event_mg
             abort(500,message='Error occured while connecting the db')
             
     api.register_blueprint(EventBluePrint)
+    api.register_blueprint(UserBluePrint)
 
     return app
 
