@@ -4,4 +4,4 @@ python-dotenv
 sqlalchemy
 flask-sqlalchemy
 tzdata
-psycopg2
+psycopg2-binary
