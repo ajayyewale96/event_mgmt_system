@@ -4,5 +4,6 @@ RUN apt-get install -y python3 python3-pip
 WORKDIR /OMNIFY
 COPY . /OMNIFY
 RUN pip install  --break-system-packages -r requirements.txt
+RUN flask db upgrade
 ENV FLASK_RUN_HOST=0.0.0.0
 ENTRYPOINT [ "flask", "run" ]

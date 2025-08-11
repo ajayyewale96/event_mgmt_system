@@ -11,7 +11,7 @@ from resources.user import blp as UserBluePrint
 from db import db
 
 
-def create_app(db_url='sqlite:///data.db'):
+def create_app(db_url=None):
     app=Flask(__name__)
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Event Management REST API"
