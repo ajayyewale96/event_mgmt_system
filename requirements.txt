@@ -7,3 +7,4 @@ tzdata
 psycopg2-binary
 flask-jwt-extended
 passlib
+flask-migrate
