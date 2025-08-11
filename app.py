@@ -2,6 +2,7 @@ from flask import Flask
 from flask_smorest import Api,abort
 from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 import os
 from time import sleep
 import models
@@ -66,21 +67,11 @@ def create_app(db_url='sqlite:///data.db'):
             'error':error
         },401
     
+    Migrate(app,db)
     db.init_app(app)
+    
     api=Api(app)
-    db_connection_retry=5
-    with app.app_context():
-        while db_connection_retry > 0:
-            try:
-                db.create_all()
-                break
-            except SQLAlchemyError:
-                sleep(60//db_connection_retry)
-                db_connection_retry-=1
-                
-        if db_connection_retry <=0:
-            abort(500,message='Error occured while connecting the db')
-            
+ 
     api.register_blueprint(EventBluePrint)
     api.register_blueprint(UserBluePrint)
 
