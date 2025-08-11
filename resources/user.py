@@ -32,6 +32,10 @@ class UserLogin(MethodView):
     def post(self,user):
         existing_user=UserModel.query.filter(UserModel.username==user['username']).first_or_404()
         if pbkdf2_sha256.verify(user['password'],existing_user.password):
-            access_token=create_access_token(identity=str(existing_user.id))
-            return {'access_token':access_token},200    
+            fresh_access_token=create_access_token(identity=str(existing_user.id),fresh=True)
+            refresh_access_token=create_access_token(identity=str(existing_user.id))
+            return {
+                'fresh_access_token':fresh_access_token,
+                'refresh_access_token':refresh_access_token
+                },200    
         abort(400,message='Incorrect password')

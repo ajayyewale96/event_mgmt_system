@@ -17,6 +17,7 @@ blp=Blueprint('events',__name__,'operation on events')
 @blp.route('/events')
 class Events(MethodView):
 
+    @jwt_required()
     @blp.response(200,EventSchema(many=True))
     def get(self):
         upcoming_events=[]
@@ -39,7 +40,7 @@ class Events(MethodView):
         else:
             abort(404,message='No upcoming events found')
     
-    @jwt_required()
+    @jwt_required(fresh=True)
     @blp.arguments(EventSchema)
     @blp.response(201,EventSchema)
     def post(self,new_event):
@@ -66,6 +67,7 @@ class Events(MethodView):
 @blp.route('/events/<string:event_id>/register')
 class EventRegister(MethodView):
 
+    @jwt_required()
     @blp.arguments(AttendeeSchema)
     @blp.response(201,AttendeeSchema)
     def post(self,attendee,event_id):
@@ -91,6 +93,7 @@ class EventRegister(MethodView):
 
 @blp.route('/events/<string:event_id>/attendees')
 class EventAttendees(MethodView):
+    @jwt_required(fresh=True)
     @blp.arguments(PaginationAttendeeSchema,location='query')
     @blp.response(200,ResponseAttedeeSchema)
     def get(self,query_params,event_id):

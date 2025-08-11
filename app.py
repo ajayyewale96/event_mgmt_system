@@ -22,7 +22,50 @@ def create_app(db_url='sqlite:///data.db'):
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL", "sqlite:///data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['JWT_SECRET_KEY']=os.getenv('JWT_SECRET_KEY','secret')
+
     jwt=JWTManager(app)
+    
+    @jwt.expired_token_loader
+    def expired_token_loader_callback(jwt_header,jwt_payload):
+        return {
+            'message':'Token has expired',
+            'error':'expired_token'
+        },401
+    
+    @jwt.additional_claims_loader
+    def additional_claims_loader_callback(identity):
+        if identity==1:
+            return {'is_admin':True}
+        return {'is_admin':False}
+    
+    @jwt.invalid_token_loader
+    def invalid_token_loader_callback(error):
+        return {
+            'message':'JWT is invalid',
+            'error':error
+        },401
+    
+    @jwt.needs_fresh_token_loader
+    def needs_fresh_token_loader(jwt_header,jwt_payload):
+        return {
+            'message':'need a fresh token',
+            'error':'fresh_token_required'
+        },401
+    
+    @jwt.revoked_token_loader
+    def revoked_token_loader_callback(wt_header,jwt_payload):
+        return {
+            'message':'Blocked token is used',
+            'error':'revoked_token_provided'
+        },401
+    
+    @jwt.unauthorized_loader
+    def unauthorized_loader_callback(error):
+        return {
+            'message':'Request does not contain acccess token',
+            'error':error
+        },401
+    
     db.init_app(app)
     api=Api(app)
     db_connection_retry=5
