@@ -5,5 +5,5 @@ WORKDIR /OMNIFY
 COPY . /OMNIFY
 RUN pip install  --break-system-packages -r requirements.txt
 ENV FLASK_RUN_HOST=0.0.0.0
-RUN chmod +x entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
